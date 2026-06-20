@@ -33,21 +33,21 @@ const WhyChooseUs = () => {
     <section className="section-padding">
       <div className="max-w-6xl mx-auto">
         <div className="text-center max-w-2xl mx-auto">
-          <span className="text-sm font-medium tracking-[0.2em] uppercase text-muted-foreground">
+          <span className="text-xs sm:text-sm font-medium tracking-[0.2em] uppercase text-muted-foreground">
             Why Skill Commerce
           </span>
-          <h2 className="heading-lg mt-4">
+          <h2 className="heading-lg mt-3 sm:mt-4">
             Built for Enterprise. Engineered for Growth.
           </h2>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 mt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8 mt-10 sm:mt-16">
           {reasons.map((reason) => (
-            <div key={reason.title} className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/5 mb-5">
-                <reason.icon className="w-5 h-5 text-primary" strokeWidth={1.5} />
+            <div key={reason.title} className="text-center sm:text-left lg:text-center">
+              <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/5 mb-4 sm:mb-5">
+                <reason.icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" strokeWidth={1.5} />
               </div>
-              <h3 className="font-semibold font-display text-foreground">{reason.title}</h3>
-              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+              <h3 className="font-semibold font-display text-foreground text-sm sm:text-base">{reason.title}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-2 leading-relaxed">
                 {reason.description}
               </p>
             </div>

@@ -43,21 +43,21 @@ const Services = () => {
   return (
     <section id="capabilities" className="section-padding">
       <div className="max-w-6xl mx-auto">
-        <span className="text-sm font-medium tracking-[0.2em] uppercase text-muted-foreground">
+        <span className="text-xs sm:text-sm font-medium tracking-[0.2em] uppercase text-muted-foreground">
           Core Capabilities
         </span>
-        <h2 className="heading-lg mt-4 max-w-xl">
+        <h2 className="heading-lg mt-3 sm:mt-4 max-w-xl">
           Enterprise Commerce Systems
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-10 sm:mt-16">
           {capabilities.map((item) => (
             <div
               key={item.title}
-              className="group p-8 rounded-xl border border-border bg-background transition-all duration-300 hover:shadow-[var(--card-shadow-hover)] hover:border-primary/20"
+              className="group p-5 sm:p-8 rounded-xl border border-border bg-background transition-all duration-300 hover:shadow-[var(--card-shadow-hover)] hover:border-primary/20"
             >
-              <item.icon className="w-5 h-5 text-primary mb-6" strokeWidth={1.5} />
-              <h3 className="font-semibold font-display text-foreground text-lg">{item.title}</h3>
-              <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+              <item.icon className="w-5 h-5 text-primary mb-4 sm:mb-6" strokeWidth={1.5} />
+              <h3 className="font-semibold font-display text-foreground text-base sm:text-lg">{item.title}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-2 sm:mt-3 leading-relaxed">
                 {item.description}
               </p>
             </div>

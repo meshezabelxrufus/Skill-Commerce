@@ -30,20 +30,20 @@ const OperationalFramework = () => {
     <section className="section-padding section-alt">
       <div className="max-w-6xl mx-auto">
         <div className="text-center max-w-2xl mx-auto">
-          <span className="text-sm font-medium tracking-[0.2em] uppercase text-muted-foreground">
+          <span className="text-xs sm:text-sm font-medium tracking-[0.2em] uppercase text-muted-foreground">
             Our Approach
           </span>
-          <h2 className="heading-lg mt-4">Operational Framework</h2>
-          <p className="body-md text-muted-foreground mt-4">
+          <h2 className="heading-lg mt-3 sm:mt-4">Operational Framework</h2>
+          <p className="body-md text-muted-foreground mt-3 sm:mt-4">
             A structured, phased methodology designed to deliver measurable outcomes at every stage of engagement.
           </p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-10 sm:mt-16">
           {steps.map((step) => (
             <div key={step.number} className="relative">
-              <span className="text-5xl font-bold font-display text-primary/10">{step.number}</span>
-              <h3 className="font-semibold font-display text-foreground mt-3 text-lg">{step.title}</h3>
-              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+              <span className="text-4xl sm:text-5xl font-bold font-display text-primary/10">{step.number}</span>
+              <h3 className="font-semibold font-display text-foreground mt-2 sm:mt-3 text-base sm:text-lg">{step.title}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-2 leading-relaxed">
                 {step.description}
               </p>
             </div>
