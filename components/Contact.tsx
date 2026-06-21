@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, MapPin, Building, ArrowRight, CheckCircle } from "lucide-react";
+import { Mail, MapPin, Building, Phone, ArrowRight, CheckCircle } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MagneticButton } from "@/components/motion/MagneticButton";
@@ -162,10 +162,11 @@ const Contact = () => {
             </div>
             <div className="space-y-3 sm:space-y-4">
               {[
-                { Icon: Mail, text: "inquiries@skillcommerce.com" },
-                { Icon: MapPin, text: "7901 4th St N #31234, St. Petersburg, FL 33702" },
-                { Icon: Building, text: "Skill Commerce LLC" },
-              ].map(({ Icon, text }) => (
+                { Icon: Mail, text: "inquiries@skillcommerce.com", href: "mailto:inquiries@skillcommerce.com" },
+                { Icon: Phone, text: "+1 (727) 435-4798", href: "tel:+17274354798" },
+                { Icon: MapPin, text: "7901 4th St N #31234, St. Petersburg, FL 33702", href: undefined },
+                { Icon: Building, text: "Skill Commerce LLC", href: undefined },
+              ].map(({ Icon, text, href }) => (
                 <motion.div
                   key={text}
                   className="flex items-start gap-3 text-muted-foreground"
@@ -173,7 +174,16 @@ const Contact = () => {
                   transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 >
                   <Icon className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                  <span className="text-xs sm:text-sm leading-relaxed break-all">{text}</span>
+                  {href ? (
+                    <a
+                      href={href}
+                      className="text-xs sm:text-sm leading-relaxed break-all hover:text-foreground transition-colors duration-200"
+                    >
+                      {text}
+                    </a>
+                  ) : (
+                    <span className="text-xs sm:text-sm leading-relaxed break-all">{text}</span>
+                  )}
                 </motion.div>
               ))}
             </div>
