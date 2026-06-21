@@ -1,161 +1,1043 @@
+/* ============================================================
+   SKILL COMMERCE DESIGN SYSTEM v2.0
+
+   Layer order (do not reorder):
+    1.  Font import
+    2.  Primitive color scales
+    3.  Semantic tokens — light mode
+    4.  Semantic tokens — dark mode
+    5.  Typography tokens (fluid clamp)
+    6.  Spacing scale
+    7.  Border radius scale
+    8.  Shadow / elevation scale
+    9.  Border tokens
+   10.  Motion tokens
+   11.  Z-index scale
+   12.  Gradient tokens
+   13.  Background texture tokens
+   14.  Tailwind directives
+   15.  Base resets
+   16.  Component utilities
+   17.  Keyframes
+   18.  Reduced-motion overrides
+   ============================================================ */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+/* ============================================================
+   2. PRIMITIVE COLOR SCALES
+   Raw HSL channel values. Never use in components directly.
+   Always consume via semantic tokens below.
+   ============================================================ */
+
+:root {
+  /* Navy — Brand primary family */
+  --navy-50:   220 60% 97%;
+  --navy-100:  220 58% 93%;
+  --navy-200:  220 55% 85%;
+  --navy-300:  220 60% 72%;
+  --navy-400:  220 65% 55%;
+  --navy-500:  220 70% 40%;
+  --navy-600:  220 72% 30%;
+  --navy-700:  220 72% 20%;   /* ← Brand primary */
+  --navy-800:  220 72% 14%;
+  --navy-900:  220 70% 9%;
+  --navy-950:  220 65% 5%;
+
+  /* Zinc — Neutral family */
+  --zinc-50:   240 5%  98%;
+  --zinc-100:  240 5%  96%;
+  --zinc-200:  240 5%  90%;
+  --zinc-300:  240 4%  82%;
+  --zinc-400:  240 4%  65%;
+  --zinc-500:  240 4%  46%;
+  --zinc-600:  240 4%  35%;
+  --zinc-700:  240 5%  24%;
+  --zinc-800:  240 5%  15%;
+  --zinc-900:  240 5%  9%;
+  --zinc-950:  240 6%  5%;
+
+  /* Electric blue — Accent family (used sparingly) */
+  --blue-300:  213 96% 78%;
+  --blue-400:  213 94% 68%;
+  --blue-500:  217 91% 60%;
+  --blue-600:  221 83% 53%;
+  --blue-700:  224 76% 48%;
+
+  /* Feedback */
+  --red-500:    0  84% 60%;
+  --green-500: 142 71% 45%;
+  --amber-500:  38 92% 50%;
+}
+
+/* ============================================================
+   3. SEMANTIC TOKENS — LIGHT MODE
+   ============================================================ */
+
+:root {
+  /* ── Backgrounds ──────────────────────────────────────────
+     bg-canvas     : page root, lowest layer
+     bg-base       : default section surface
+     bg-subtle     : alternate sections, table rows, insets
+     bg-inset      : inputs, code blocks, nested surfaces
+     bg-surface    : cards, floating elements
+     bg-inverse    : dark hero, CTA banner, dark sections
+     bg-overlay    : modals, drawers
+  */
+  --bg-canvas:    var(--zinc-50);
+  --bg-base:      0 0% 100%;
+  --bg-subtle:    var(--zinc-100);
+  --bg-inset:     var(--zinc-200);
+  --bg-surface:   0 0% 100%;
+  --bg-inverse:   var(--zinc-950);
+  --bg-overlay:   var(--zinc-900);
+
+  /* ── Dark inverse surface hierarchy ─────────────────────────
+     Use for hero, CTA sections, dark panels, mega menu, drawer.
+     Never use ad hoc dark values — always consume these.       */
+  --bg-inverse-canvas:  220 20% 5%;    /* deepest floor            */
+  --bg-inverse-base:    220 20% 8%;    /* panels, mega menu        */
+  --bg-inverse-subtle:  220 20% 11%;   /* hover states on dark     */
+  --bg-inverse-surface: 220 25% 13%;   /* raised elements on dark  */
+
+  /* ── Text ─────────────────────────────────────────────────*/
+  --text-primary:   var(--zinc-950);
+  --text-secondary: var(--zinc-500);
+  --text-tertiary:  var(--zinc-400);
+  --text-disabled:  var(--zinc-300);
+  --text-inverse:   var(--zinc-50);
+  --text-brand:     var(--navy-700);
+  --text-accent:    var(--blue-600);
+  --text-link:      var(--navy-700);
+  --text-link-hover: var(--blue-600);
+
+  /* ── Borders ──────────────────────────────────────────────*/
+  --border-subtle:  var(--zinc-200);
+  --border-default: var(--zinc-200);
+  --border-strong:  var(--zinc-300);
+  --border-brand:   var(--navy-700);
+  --border-focus:   var(--blue-500);
+
+  /* ── Brand / Interactive ──────────────────────────────────*/
+  --brand-primary:        var(--navy-700);
+  --brand-primary-hover:  var(--navy-600);
+  --brand-primary-active: var(--navy-800);
+  --brand-primary-subtle: var(--navy-100);
+  --brand-accent:         var(--blue-600);
+  --brand-accent-hover:   var(--blue-500);
+
+  /* ── Shadow base color ────────────────────────────────────*/
+  --shadow-color: 220 40% 10%;
+
+  /* ── Feedback ─────────────────────────────────────────────*/
+  --color-error:   var(--red-500);
+  --color-success: var(--green-500);
+  --color-warning: var(--amber-500);
+
+  /* ── shadcn/ui compatibility (do not rename) ─────────────*/
+  --background:          var(--bg-canvas);
+  --foreground:          var(--text-primary);
+  --card:                var(--bg-surface);
+  --card-foreground:     var(--text-primary);
+  --popover:             var(--bg-base);
+  --popover-foreground:  var(--text-primary);
+  --primary:             var(--brand-primary);
+  --primary-foreground:  0 0% 100%;
+  --secondary:           var(--bg-subtle);
+  --secondary-foreground: var(--text-primary);
+  --muted:               var(--bg-subtle);
+  --muted-foreground:    var(--text-secondary);
+  --accent:              var(--brand-primary);
+  --accent-foreground:   0 0% 100%;
+  --destructive:         var(--color-error);
+  --destructive-foreground: 0 0% 100%;
+  --border:              var(--border-default);
+  --input:               var(--border-default);
+  --ring:                var(--border-focus);
+
+  /* Radius — single source for shadcn */
+  --radius: 0.75rem;
+
+  /* Sidebar — shadcn sidebar compat */
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary:    var(--brand-primary);
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent:     var(--bg-subtle);
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border:     var(--border-default);
+  --sidebar-ring:       var(--border-focus);
+}
+
+/* ============================================================
+   4. SEMANTIC TOKENS — DARK MODE
+   ============================================================ */
+
+.dark {
+  --bg-canvas:    var(--zinc-950);
+  --bg-base:      var(--zinc-900);
+  --bg-subtle:    var(--zinc-800);
+  --bg-inset:     var(--zinc-800);
+  --bg-surface:   var(--zinc-900);
+  --bg-inverse:   0 0% 100%;
+  --bg-overlay:   var(--zinc-950);
+
+  --text-primary:    var(--zinc-50);
+  --text-secondary:  var(--zinc-400);
+  --text-tertiary:   var(--zinc-500);
+  --text-disabled:   var(--zinc-700);
+  --text-inverse:    var(--zinc-950);
+  --text-brand:      var(--navy-300);
+  --text-accent:     var(--blue-400);
+  --text-link:       var(--navy-200);
+  --text-link-hover: var(--blue-400);
+
+  --border-subtle:  220 15% 14%;
+  --border-default: 220 15% 18%;
+  --border-strong:  220 15% 26%;
+  --border-brand:   var(--navy-400);
+  --border-focus:   var(--blue-400);
+
+  --brand-primary:        var(--navy-300);
+  --brand-primary-hover:  var(--navy-200);
+  --brand-primary-active: var(--navy-400);
+  --brand-primary-subtle: 220 30% 15%;
+  --brand-accent:         var(--blue-400);
+  --brand-accent-hover:   var(--blue-300);
+
+  --shadow-color: 220 40% 3%;
+
+  /* shadcn compat */
+  --background:          var(--bg-canvas);
+  --foreground:          var(--text-primary);
+  --card:                var(--bg-surface);
+  --card-foreground:     var(--text-primary);
+  --popover:             var(--bg-base);
+  --popover-foreground:  var(--text-primary);
+  --primary:             var(--brand-primary);
+  --primary-foreground:  var(--zinc-950);
+  --secondary:           var(--bg-subtle);
+  --secondary-foreground: var(--text-primary);
+  --muted:               var(--bg-subtle);
+  --muted-foreground:    var(--text-secondary);
+  --accent:              var(--brand-primary);
+  --accent-foreground:   var(--zinc-950);
+  --destructive:         var(--color-error);
+  --destructive-foreground: 0 0% 100%;
+  --border:              var(--border-default);
+  --input:               var(--border-default);
+  --ring:                var(--border-focus);
+
+  --sidebar-background: var(--bg-canvas);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary:    var(--brand-primary);
+  --sidebar-primary-foreground: var(--zinc-950);
+  --sidebar-accent:     var(--bg-subtle);
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border:     var(--border-default);
+  --sidebar-ring:       var(--border-focus);
+}
+
+/* ============================================================
+   5. TYPOGRAPHY TOKENS
+   Fluid clamp() — responsive without breakpoints.
+   Formula: clamp(min, preferred, max)
+   ============================================================ */
+
+:root {
+  /* Size scale */
+  --text-2xs:  clamp(0.625rem,  0.6rem   + 0.125vw,  0.6875rem);  /* 10–11px */
+  --text-xs:   clamp(0.75rem,   0.7rem   + 0.25vw,   0.8125rem);  /* 12–13px */
+  --text-sm:   clamp(0.875rem,  0.8rem   + 0.375vw,  0.9375rem);  /* 14–15px */
+  --text-base: clamp(1rem,      0.95rem  + 0.25vw,   1.0625rem);  /* 16–17px */
+  --text-lg:   clamp(1.125rem,  1rem     + 0.625vw,  1.25rem);    /* 18–20px */
+  --text-xl:   clamp(1.25rem,   1.1rem   + 0.75vw,   1.5rem);     /* 20–24px */
+  --text-2xl:  clamp(1.5rem,    1.3rem   + 1vw,      1.875rem);   /* 24–30px */
+  --text-3xl:  clamp(1.875rem,  1.5rem   + 1.875vw,  2.25rem);    /* 30–36px */
+  --text-4xl:  clamp(2.25rem,   1.75rem  + 2.5vw,    3rem);       /* 36–48px */
+  --text-5xl:  clamp(3rem,      2rem     + 5vw,      4rem);       /* 48–64px */
+  --text-6xl:  clamp(3.75rem,   2.5rem   + 6.25vw,   5rem);       /* 60–80px */
+  --text-7xl:  clamp(4.5rem,    3rem     + 7.5vw,    6rem);       /* 72–96px — display */
+
+  /* Weights */
+  --font-weight-light:    300;
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* Letter spacing */
+  --tracking-tightest: -0.04em;
+  --tracking-tighter:  -0.03em;
+  --tracking-tight:    -0.02em;
+  --tracking-snug:     -0.01em;
+  --tracking-normal:    0em;
+  --tracking-wide:      0.05em;
+  --tracking-wider:     0.1em;
+  --tracking-widest:    0.2em;
+  --tracking-label:     0.15em;  /* eyebrow / section labels */
+
+  /* Line height */
+  --leading-none:     1;
+  --leading-tightest: 1.05;  /* display / hero */
+  --leading-tight:    1.1;   /* large headings */
+  --leading-snug:     1.2;   /* medium headings */
+  --leading-normal:   1.4;   /* subheadings */
+  --leading-relaxed:  1.65;  /* body */
+  --leading-loose:    1.8;   /* captions, small text */
+
+  /* Families */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-mono:    ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ============================================================
+   6. SPACING SCALE (4px base unit)
+   ============================================================ */
+
+:root {
+  --space-px:   1px;
+  --space-0:    0rem;
+  --space-0-5:  0.125rem;   /*  2px */
+  --space-1:    0.25rem;    /*  4px */
+  --space-1-5:  0.375rem;   /*  6px */
+  --space-2:    0.5rem;     /*  8px */
+  --space-2-5:  0.625rem;   /* 10px */
+  --space-3:    0.75rem;    /* 12px */
+  --space-4:    1rem;       /* 16px */
+  --space-5:    1.25rem;    /* 20px */
+  --space-6:    1.5rem;     /* 24px */
+  --space-7:    1.75rem;    /* 28px */
+  --space-8:    2rem;       /* 32px */
+  --space-10:   2.5rem;     /* 40px */
+  --space-12:   3rem;       /* 48px */
+  --space-14:   3.5rem;     /* 56px */
+  --space-16:   4rem;       /* 64px */
+  --space-20:   5rem;       /* 80px */
+  --space-24:   6rem;       /* 96px */
+  --space-28:   7rem;       /* 112px */
+  --space-32:   8rem;       /* 128px */
+  --space-40:   10rem;      /* 160px */
+  --space-48:   12rem;      /* 192px */
+  --space-56:   14rem;      /* 224px */
+  --space-64:   16rem;      /* 256px */
+
+  /* Fluid section padding — responsive without breakpoints */
+  --section-space-xs:  clamp(3rem,   5vw,   5rem);    /*  48–80px  */
+  --section-space-sm:  clamp(4rem,   7vw,   7.5rem);  /*  64–120px */
+  --section-space-md:  clamp(5rem,   10vw,  10rem);   /*  80–160px */
+  --section-space-lg:  clamp(6rem,   12vw,  12.5rem); /*  96–200px */
+  --section-space-xl:  clamp(6rem,   15vw,  15rem);   /*  96–240px */
+
+  /* Content max widths */
+  --content-xs:  20rem;    /* 320px */
+  --content-sm:  36rem;    /* 576px */
+  --content-md:  48rem;    /* 768px — prose max */
+  --content-lg:  64rem;    /* 1024px */
+  --content-xl:  80rem;    /* 1280px — layout max */
+  --content-2xl: 90rem;    /* 1440px */
+}
+
+/* ============================================================
+   7. BORDER RADIUS SCALE
+   ============================================================ */
+
+:root {
+  --radius-none: 0;
+  --radius-sm:   0.25rem;    /*  4px — tags, chips */
+  --radius-base: 0.375rem;   /*  6px — inputs */
+  --radius-md:   0.5rem;     /*  8px — buttons */
+  --radius-lg:   0.625rem;   /* 10px */
+  --radius-xl:   0.75rem;    /* 12px — cards */
+  --radius-2xl:  1rem;       /* 16px — modals, large cards */
+  --radius-3xl:  1.5rem;     /* 24px */
+  --radius-full: 9999px;     /* pills */
+
+  /* Semantic aliases */
+  --radius-button:  var(--radius-md);
+  --radius-card:    var(--radius-xl);
+  --radius-input:   var(--radius-base);
+  --radius-badge:   var(--radius-full);
+  --radius-modal:   var(--radius-2xl);
+  --radius-tooltip: var(--radius-base);
+}
+
+/* ============================================================
+   8. SHADOW / ELEVATION SCALE
+   6 levels: none → xs → sm → md → lg → xl → 2xl
+   ============================================================ */
+
+:root {
+  --shadow-none: none;
+
+  /* Level 1 — Inputs, very light lift */
+  --shadow-xs:
+    0 1px 2px 0 hsl(var(--shadow-color) / 0.05);
+
+  /* Level 2 — Card default */
+  --shadow-sm:
+    0 1px 3px 0    hsl(var(--shadow-color) / 0.06),
+    0 1px 2px -1px hsl(var(--shadow-color) / 0.04);
+
+  /* Level 3 — Card hover, inline popovers */
+  --shadow-md:
+    0 4px 8px  -2px hsl(var(--shadow-color) / 0.09),
+    0 2px 4px  -2px hsl(var(--shadow-color) / 0.05);
+
+  /* Level 4 — Dropdowns, floating panels */
+  --shadow-lg:
+    0 10px 24px -4px hsl(var(--shadow-color) / 0.11),
+    0 4px  8px  -4px hsl(var(--shadow-color) / 0.05);
+
+  /* Level 5 — Dialogs, drawers */
+  --shadow-xl:
+    0 20px 40px -8px  hsl(var(--shadow-color) / 0.15),
+    0 8px  16px -8px  hsl(var(--shadow-color) / 0.06);
+
+  /* Level 6 — Maximum: command palette, priority overlays */
+  --shadow-2xl:
+    0 32px 64px -12px hsl(var(--shadow-color) / 0.22),
+    0 12px 24px -12px hsl(var(--shadow-color) / 0.08);
+
+  /* Semantic aliases */
+  --shadow-card:       var(--shadow-sm);
+  --shadow-card-hover:
+    0 8px 24px -4px hsl(var(--shadow-color) / 0.10),
+    0 3px 8px  -3px hsl(var(--shadow-color) / 0.07);
+
+  /* Brand glow — electric blue, only for focus / highlight moments */
+  --shadow-glow-brand:
+    0 0 0  3px  hsl(var(--border-focus) / 0.25),
+    0 0 16px    hsl(var(--border-focus) / 0.15);
+
+  /* Focus ring */
+  --shadow-focus:
+    0 0 0 3px hsl(var(--border-focus) / 0.4);
+}
+
+/* ============================================================
+   9. BORDER TOKENS
+   ============================================================ */
+
+:root {
+  /* Widths */
+  --border-width-thin:  1px;
+  --border-width-base:  1px;
+  --border-width-thick: 2px;
+
+  /* Semantic composites */
+  --border-divider:       1px solid hsl(var(--border-subtle));
+  --border-card:          1px solid hsl(var(--border-default));
+  --border-card-hover:    1px solid hsl(var(--border-strong));
+  --border-input:         1px solid hsl(var(--border-default));
+  --border-input-focus:   1px solid hsl(var(--border-focus));
+  --border-accent-stripe: 2px solid hsl(var(--brand-primary));
+
+  /* Gradient hairline — for section separators */
+  --border-gradient-h: linear-gradient(
+    to right,
+    transparent 0%,
+    hsl(var(--border-default)) 30%,
+    hsl(var(--border-default)) 70%,
+    transparent 100%
+  );
+  --border-gradient-v: linear-gradient(
+    to bottom,
+    transparent 0%,
+    hsl(var(--border-default)),
+    transparent 100%
+  );
+}
+
+/* ============================================================
+   10. MOTION TOKENS
+   ============================================================ */
+
+:root {
+  /* ── Duration scale ── */
+  --duration-instant: 75ms;
+  --duration-fast:    150ms;
+  --duration-base:    250ms;
+  --duration-slow:    400ms;
+  --duration-slower:  550ms;
+  --duration-slowest: 700ms;
+
+  /* ── Standard easing ── */
+  --ease-linear:  linear;
+  --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Expressive easing (entrances, interactions) ── */
+  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);   /* slight overshoot */
+  --ease-back-out: cubic-bezier(0.34, 1.30, 0.64, 1);   /* subtler spring */
+
+  /* ── Stagger delays ── */
+  --stagger-fast:  50ms;
+  --stagger-base:  80ms;
+  --stagger-slow:  120ms;
+  --stagger-xslow: 160ms;
+
+  /* ── Transition presets (CSS-only; Framer Motion has its own) ── */
+  --transition-color:
+    color            var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color     var(--duration-fast) var(--ease-out);
+
+  --transition-card:
+    transform    var(--duration-base) var(--ease-spring),
+    box-shadow   var(--duration-base) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+
+  --transition-button:
+    transform        var(--duration-fast) var(--ease-spring),
+    box-shadow       var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    gap              var(--duration-fast) var(--ease-out);
+}
+
+/* ============================================================
+   11. Z-INDEX SCALE
+   ============================================================ */
+
+:root {
+  --z-hide:      -1;
+  --z-base:       0;
+  --z-raised:     10;
+  --z-dropdown:   100;
+  --z-sticky:     200;
+  --z-overlay:    300;
+  --z-modal:      400;
+  --z-toast:      500;
+  --z-tooltip:    600;
+}
+
+/* ============================================================
+   12. GRADIENT TOKENS
+   ============================================================ */
+
+:root {
+  /* Brand */
+  --gradient-brand:
+    linear-gradient(135deg, hsl(var(--navy-700)) 0%, hsl(var(--navy-500)) 100%);
+  --gradient-brand-subtle:
+    linear-gradient(135deg, hsl(var(--navy-50)) 0%, hsl(var(--zinc-100)) 100%);
+
+  /* Hero / dark sections */
+  --gradient-hero-dark:
+    linear-gradient(160deg, hsl(var(--zinc-950)) 0%, hsl(220 40% 8%) 100%);
+
+  /* Aurora — three radial blobs layered over near-black */
+  --gradient-aurora:
+    radial-gradient(ellipse 80% 55% at 20% 45%, hsl(220 72% 20% / 0.55) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 75% at 78% 60%, hsl(220 55% 12% / 0.40) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 55% 20%, hsl(221 80% 16% / 0.30) 0%, transparent 70%),
+    hsl(var(--zinc-950));
+
+  /* Surfaces */
+  --gradient-surface-card:
+    linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(var(--zinc-50)) 100%);
+
+  /* Text gradient (accent moments only) */
+  --gradient-text-brand:
+    linear-gradient(135deg, hsl(var(--navy-700)) 0%, hsl(var(--blue-600)) 100%);
+
+  /* Fade overlays */
+  --gradient-fade-up:
+    linear-gradient(to top, hsl(var(--bg-canvas)) 0%, transparent 100%);
+  --gradient-fade-down:
+    linear-gradient(to bottom, hsl(var(--bg-canvas)) 0%, transparent 100%);
+}
+
+/* ============================================================
+   13. BACKGROUND TEXTURE TOKENS
+   ============================================================ */
+
+:root {
+  /* Dot grid — 22px grid, 1.5px dots */
+  --texture-dot-grid-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Ccircle cx='1' cy='1' r='0.75' fill='%23000' fill-opacity='0.045'/%3E%3C/svg%3E");
+  --texture-dot-grid-dark:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Ccircle cx='1' cy='1' r='0.75' fill='%23fff' fill-opacity='0.07'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   14. TAILWIND DIRECTIVES
+   ============================================================ */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 220 25% 5%;
-
-    --card: 220 20% 97%;
-    --card-foreground: 220 20% 10%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 10%;
-
-    --primary: 220 72% 20%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 220 15% 95%;
-    --secondary-foreground: 220 20% 10%;
-
-    --muted: 220 15% 96%;
-    --muted-foreground: 220 12% 34%;
-
-    --accent: 220 72% 20%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 15% 90%;
-    --input: 220 15% 90%;
-    --ring: 220 72% 20%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-
-    /* Custom tokens */
-    --hero-gradient: linear-gradient(135deg, hsl(220 72% 20%) 0%, hsl(220 60% 35%) 100%);
-    --card-shadow: 0 1px 3px 0 hsl(220 20% 10% / 0.04), 0 1px 2px -1px hsl(220 20% 10% / 0.04);
-    --card-shadow-hover: 0 10px 30px -8px hsl(220 20% 10% / 0.08);
-    --section-alt: 220 20% 98%;
-  }
-
-  .dark {
-    --background: 220 20% 6%;
-    --foreground: 220 10% 94%;
-    --card: 220 20% 10%;
-    --card-foreground: 220 10% 94%;
-    --popover: 220 20% 8%;
-    --popover-foreground: 220 10% 94%;
-    --primary: 220 60% 60%;
-    --primary-foreground: 220 20% 6%;
-    --secondary: 220 15% 15%;
-    --secondary-foreground: 220 10% 94%;
-    --muted: 220 15% 15%;
-    --muted-foreground: 220 10% 55%;
-    --accent: 220 60% 60%;
-    --accent-foreground: 220 20% 6%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 18%;
-    --input: 220 15% 18%;
-    --ring: 220 60% 60%;
-    --sidebar-background: 220 20% 8%;
-    --sidebar-foreground: 220 10% 90%;
-    --sidebar-primary: 220 60% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 15% 15%;
-    --sidebar-accent-foreground: 220 10% 90%;
-    --sidebar-border: 220 15% 18%;
-    --sidebar-ring: 220 60% 60%;
-  }
-}
+/* ============================================================
+   15. BASE RESETS
+   ============================================================ */
 
 @layer base {
-  * {
+  *,
+  *::before,
+  *::after {
     @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering:           optimizeLegibility;
+    -webkit-font-smoothing:   antialiased;
+    -moz-osx-font-smoothing:  grayscale;
+    font-feature-settings:    'cv11', 'ss01';
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    background-color: hsl(var(--bg-canvas));
+    color:            hsl(var(--text-primary));
+    font-family:      var(--font-body);
+    font-size:        var(--text-base);
+    line-height:      var(--leading-relaxed);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
-    @apply tracking-tight text-foreground;
+    font-family:    var(--font-display);
+    font-weight:    var(--font-weight-bold);
+    line-height:    var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    color:          hsl(var(--text-primary));
+  }
+
+  p {
+    max-width: 70ch;
+  }
+
+  a {
+    color:           inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background-color: hsl(var(--brand-primary) / 0.14);
+    color:            hsl(var(--text-primary));
+  }
+
+  :focus-visible {
+    outline:    none;
+    box-shadow: var(--shadow-focus);
   }
 }
 
+/* ============================================================
+   16. COMPONENT UTILITIES
+   ============================================================ */
+
 @layer utilities {
+
+  /* ── Sections ─────────────────────────────────────────────*/
+
+  /* Full-bleed section wrapper with fluid padding and auto-gutter */
+  .section-outer {
+    padding-top:    var(--section-space-lg);
+    padding-bottom: var(--section-space-lg);
+    padding-left:   max(1.25rem, calc((100vw - var(--content-xl)) / 2));
+    padding-right:  max(1.25rem, calc((100vw - var(--content-xl)) / 2));
+  }
+
+  .section-outer--sm {
+    padding-top:    var(--section-space-sm);
+    padding-bottom: var(--section-space-sm);
+    padding-left:   max(1.25rem, calc((100vw - var(--content-xl)) / 2));
+    padding-right:  max(1.25rem, calc((100vw - var(--content-xl)) / 2));
+  }
+
+  /* Centered content container */
+  .section-inner {
+    max-width:    var(--content-xl);
+    margin-left:  auto;
+    margin-right: auto;
+    width:        100%;
+  }
+
+  /* Narrow centered prose */
+  .section-inner--prose {
+    max-width:    var(--content-md);
+    margin-left:  auto;
+    margin-right: auto;
+    width:        100%;
+  }
+
+  /* Legacy compat — used in current components */
   .section-padding {
-    @apply px-5 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 lg:px-20 xl:px-32;
+    padding-top:    var(--section-space-md);
+    padding-bottom: var(--section-space-md);
+    padding-left:   max(1.25rem, calc((100vw - var(--content-xl)) / 2));
+    padding-right:  max(1.25rem, calc((100vw - var(--content-xl)) / 2));
   }
 
-  .section-alt {
-    background-color: hsl(var(--section-alt));
+  /* ── Surface variants ─────────────────────────────────────*/
+  .surface-base    { background-color: hsl(var(--bg-base));    }
+  .surface-subtle  { background-color: hsl(var(--bg-subtle));  }
+  .surface-inset   { background-color: hsl(var(--bg-inset));   }
+  .surface-inverse { background-color: hsl(var(--bg-inverse)); }
+  .section-alt     { background-color: hsl(var(--bg-subtle));  } /* legacy compat */
+
+  /* ── Typography ───────────────────────────────────────────*/
+
+  .text-display {
+    font-family:    var(--font-display);
+    font-size:      var(--text-7xl);
+    font-weight:    var(--font-weight-bold);
+    line-height:    var(--leading-tightest);
+    letter-spacing: var(--tracking-tighter);
   }
 
+  .text-heading-1 {
+    font-family:    var(--font-display);
+    font-size:      var(--text-6xl);
+    font-weight:    var(--font-weight-bold);
+    line-height:    var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .text-heading-2 {
+    font-family:    var(--font-display);
+    font-size:      var(--text-5xl);
+    font-weight:    var(--font-weight-bold);
+    line-height:    var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .text-heading-3 {
+    font-family:    var(--font-display);
+    font-size:      var(--text-4xl);
+    font-weight:    var(--font-weight-semibold);
+    line-height:    var(--leading-snug);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .text-heading-4 {
+    font-family:    var(--font-display);
+    font-size:      var(--text-3xl);
+    font-weight:    var(--font-weight-semibold);
+    line-height:    var(--leading-snug);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .text-heading-5 {
+    font-family:    var(--font-display);
+    font-size:      var(--text-2xl);
+    font-weight:    var(--font-weight-semibold);
+    line-height:    var(--leading-normal);
+    letter-spacing: var(--tracking-normal);
+  }
+
+  .text-body-xl {
+    font-family: var(--font-body);
+    font-size:   var(--text-xl);
+    line-height: var(--leading-relaxed);
+  }
+
+  .text-body-lg {
+    font-family: var(--font-body);
+    font-size:   var(--text-lg);
+    line-height: var(--leading-relaxed);
+  }
+
+  .text-body {
+    font-family: var(--font-body);
+    font-size:   var(--text-base);
+    line-height: var(--leading-relaxed);
+  }
+
+  .text-body-sm {
+    font-family: var(--font-body);
+    font-size:   var(--text-sm);
+    line-height: var(--leading-loose);
+  }
+
+  /* Section eyebrow / label — used extensively */
+  .text-label {
+    font-family:    var(--font-body);
+    font-size:      var(--text-xs);
+    font-weight:    var(--font-weight-medium);
+    line-height:    1;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color:          hsl(var(--text-secondary));
+  }
+
+  /* Legacy compat — expanded to raw CSS (no @apply on custom utilities) */
   .heading-xl {
-    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight;
+    font-family: var(--font-display);
+    font-size: var(--text-6xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
   }
 
   .heading-lg {
-    @apply text-2xl sm:text-3xl md:text-4xl font-bold leading-tight tracking-tight;
+    font-family: var(--font-display);
+    font-size: var(--text-4xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-snug);
   }
 
   .heading-md {
-    @apply text-xl md:text-2xl font-semibold leading-tight tracking-tight;
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-normal);
+    letter-spacing: var(--tracking-normal);
   }
 
   .body-lg {
-    @apply text-base sm:text-lg md:text-xl leading-relaxed;
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
   }
 
   .body-md {
-    @apply text-sm sm:text-base leading-relaxed;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
   }
 
-  .text-balance {
-    text-wrap: balance;
+  /* Gradient text */
+  .text-gradient-brand {
+    background:               var(--gradient-text-brand);
+    -webkit-background-clip:  text;
+    -webkit-text-fill-color:  transparent;
+    background-clip:          text;
   }
 
-  .animate-fade-up {
-    animation: fadeUp 0.7s ease-out both;
+  /* Text balance for headlines */
+  .text-balance { text-wrap: balance; }
+
+  /* ── Cards ────────────────────────────────────────────────*/
+
+  .card-default {
+    background-color: hsl(var(--bg-surface));
+    border:           var(--border-card);
+    border-radius:    var(--radius-card);
+    box-shadow:       var(--shadow-card);
+    transition:       var(--transition-card);
+    will-change:      transform, box-shadow;
   }
 
-  .animate-fade-up-delay-1 {
-    animation: fadeUp 0.7s 0.1s ease-out both;
+  .card-default:hover {
+    border:    var(--border-card-hover);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
   }
 
-  .animate-fade-up-delay-2 {
-    animation: fadeUp 0.7s 0.2s ease-out both;
+  /* Left-accent stripe card */
+  .card-feature {
+    background-color: hsl(var(--bg-subtle));
+    border-left:      var(--border-accent-stripe);
+    border-radius:    0 var(--radius-card) var(--radius-card) 0;
+    padding-left:     var(--space-7);
   }
 
-  .animate-fade-up-delay-3 {
-    animation: fadeUp 0.7s 0.3s ease-out both;
+  /* On dark backgrounds */
+  .card-inverse {
+    background-color: hsl(var(--zinc-900));
+    border:           1px solid hsl(0 0% 100% / 0.08);
+    border-radius:    var(--radius-card);
+    box-shadow:       var(--shadow-sm);
+    transition:       var(--transition-card);
+    will-change:      transform, box-shadow;
   }
+
+  .card-inverse:hover {
+    border-color: hsl(0 0% 100% / 0.14);
+    box-shadow:   var(--shadow-md);
+    transform:    translateY(-2px);
+  }
+
+  /* ── Dividers ─────────────────────────────────────────────*/
+
+  .divider-h {
+    height:     1px;
+    border:     none;
+    background: var(--border-gradient-h);
+  }
+
+  .divider-v {
+    width:      1px;
+    border:     none;
+    background: var(--border-gradient-v);
+  }
+
+  /* ── Backgrounds ──────────────────────────────────────────*/
+
+  .bg-dot-grid-light { background-image: var(--texture-dot-grid-light); }
+  .bg-dot-grid-dark  { background-image: var(--texture-dot-grid-dark);  }
+  .bg-aurora         { background:       var(--gradient-aurora);         }
+
+  /* ── Animated underline links ─────────────────────────────*/
+
+  .link-underline {
+    position: relative;
+    display:  inline-block;
+  }
+
+  .link-underline::after {
+    content:          '';
+    position:         absolute;
+    bottom:           -2px;
+    left:             0;
+    width:            100%;
+    height:           1px;
+    background-color: hsl(var(--brand-accent));
+    transform:        scaleX(0);
+    transform-origin: left;
+    transition:       transform var(--duration-base) var(--ease-spring);
+  }
+
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* ── Loading skeleton ─────────────────────────────────────*/
+
+  .skeleton {
+    background:      linear-gradient(
+      90deg,
+      hsl(var(--bg-subtle)) 25%,
+      hsl(var(--bg-inset))  50%,
+      hsl(var(--bg-subtle)) 75%
+    );
+    background-size: 200% 100%;
+    animation:       skeleton-shimmer 1.5s var(--ease-in-out) infinite;
+    border-radius:   var(--radius-base);
+  }
+
+  /* ── GPU promotion hint ───────────────────────────────────*/
+  .will-animate {
+    will-change: transform, opacity;
+  }
+
+  /* ── Ambient animations ───────────────────────────────────*/
+  .aurora-layer  { animation: aurora-shift   60s var(--ease-in-out) infinite alternate; }
+  .float-layer   { animation: float-ambient   6s var(--ease-in-out) infinite;           }
+  .glow-pulse    { animation: glow-pulse       3s var(--ease-in-out) infinite;           }
+
+  /* Per-blob aurora — each runs on the compositor thread at a
+     different duration so they never synchronize.            */
+  .aurora-blob-a { animation: aurora-shift   62s ease-in-out infinite alternate; }
+  .aurora-blob-b { animation: aurora-shift-b 78s ease-in-out infinite alternate; }
+  .aurora-blob-c { animation: aurora-shift-c 91s ease-in-out infinite alternate; }
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
+/* ============================================================
+   17. KEYFRAMES
+   ============================================================ */
+
+/* ── Entrance ── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fade-down {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+
+@keyframes fade-left {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+@keyframes fade-right {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+/* ── Accordion (Radix) ── */
+@keyframes accordion-down {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
+}
+
+/* ── Ambient / continuous ── */
+@keyframes aurora-shift {
+  0%   { transform: translate(0%,   0%)   scale(1);    opacity: 1;    }
+  33%  { transform: translate(2%,  -3%)   scale(1.04); opacity: 0.92; }
+  66%  { transform: translate(-2%,  2%)   scale(0.97); opacity: 0.96; }
+  100% { transform: translate(0%,   0%)   scale(1);    opacity: 1;    }
+}
+
+@keyframes aurora-shift-b {
+  0%   { transform: translate(0%,   0%)  scale(1.00); }
+  33%  { transform: translate(-3%,  2%)  scale(1.05); }
+  66%  { transform: translate(2%,  -2%)  scale(0.96); }
+  100% { transform: translate(0%,   0%)  scale(1.00); }
+}
+
+@keyframes aurora-shift-c {
+  0%   { transform: translate(0%,   0%)  scale(1.00); }
+  40%  { transform: translate(3%,  -4%)  scale(1.03); }
+  70%  { transform: translate(-2%,  3%)  scale(0.98); }
+  100% { transform: translate(0%,   0%)  scale(1.00); }
+}
+
+@keyframes float-ambient {
+  0%, 100% { transform: translateY(0);    }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.65; }
+}
+
+/* ── Skeleton ── */
+@keyframes skeleton-shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position:  200% 0; }
+}
+
+/* ── Link underline ── */
+@keyframes underline-grow {
+  from { transform: scaleX(0); transform-origin: left; }
+  to   { transform: scaleX(1); transform-origin: left; }
+}
+
+/* ============================================================
+   18. REDUCED MOTION OVERRIDES
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1      !important;
+    transition-duration:       0.01ms !important;
+    scroll-behavior:           auto   !important;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .aurora-layer,
+  .aurora-blob-a,
+  .aurora-blob-b,
+  .aurora-blob-c,
+  .float-layer,
+  .glow-pulse,
+  .skeleton {
+    animation: none !important;
   }
 }
