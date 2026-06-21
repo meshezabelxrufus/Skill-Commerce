@@ -40,9 +40,9 @@ const Contact = () => {
                 <Mail className="w-4 h-4 text-primary flex-shrink-0" />
                 <span className="text-xs sm:text-sm break-all">inquiries@skillcommerce.com</span>
               </div>
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
-                <span className="text-xs sm:text-sm">Florida, United States</span>
+              <div className="flex items-start gap-3 text-muted-foreground">
+                <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <span className="text-xs sm:text-sm">7901 4th St N #31234,<br />St. Petersburg, FL 33702</span>
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <Building className="w-4 h-4 text-primary flex-shrink-0" />
