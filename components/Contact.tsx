@@ -162,7 +162,7 @@ const Contact = () => {
             </div>
             <div className="space-y-3 sm:space-y-4">
               {[
-                { Icon: Mail, text: "inquiries@skillcommerce.com", href: "mailto:inquiries@skillcommerce.com" },
+                { Icon: Mail, text: "inquiries@skillcommercellc.com", href: "mailto:inquiries@skillcommercellc.com" },
                 { Icon: Phone, text: "+1 (727) 435-4798", href: "tel:+17274354798" },
                 { Icon: MapPin, text: "7901 4th St N #31234, St. Petersburg, FL 33702", href: undefined },
                 { Icon: Building, text: "Skill Commerce LLC", href: undefined },
