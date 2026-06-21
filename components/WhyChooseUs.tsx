@@ -47,7 +47,9 @@ const WhyChooseUs = () => {
   const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
     const ctx = gsap.context(() => {
+      if (isMobile) return;
       gsap.fromTo(
         headerRef.current,
         { opacity: 0, y: 50 },

@@ -10,57 +10,56 @@ import { MagneticButton } from "@/components/motion/MagneticButton";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ── Framer Motion entrance variants (page-load only) ─────── */
 const container = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.13, delayChildren: 0.2 } },
 };
 const item = {
-  hidden: { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: "easeOut" as const } },
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
 };
 
 const Hero = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLDivElement>(null);
-  const headRef = useRef<HTMLHeadingElement>(null);
-  const subRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+  const sectionRef  = useRef<HTMLElement>(null);
+  const bgRef       = useRef<HTMLDivElement>(null);
+  const labelRef    = useRef<HTMLDivElement>(null);
+  const headRef     = useRef<HTMLHeadingElement>(null);
+  const subRef      = useRef<HTMLParagraphElement>(null);
+  const ctaRef      = useRef<HTMLDivElement>(null);
+  const indicatorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // ── Mobile: skip the pinned scroll scrub entirely ──────────────
+    // GSAP pin on mobile causes jank because it creates a sticky
+    // stacking context that conflicts with native momentum scrolling.
+    // Mobile gets a clean static hero with just the Framer entrance.
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return;
+
     const ctx = gsap.context(() => {
-      /* ── PINNED SCROLL SCRUB ──────────────────────────────
-         The section is pinned so it stays on screen while the
-         user scrolls through 100% of the viewport height.
-         During that scroll, content layers drift at different
-         speeds — foreground faster, background slower.
-      ─────────────────────────────────────────────────────── */
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=100%",
+          end: "+=90%",
           pin: true,
-          scrub: 1.4,
+          scrub: 1.2,        // slightly lower scrub = less work per frame
           pinSpacing: true,
           anticipatePin: 1,
+          // fastScrollEnd prevents stutter after fast scroll flicks
+          fastScrollEnd: true,
         },
       });
 
-      // Layer 3 — Background (slow, cinematic drift)
-      tl.to(bgRef.current, { scale: 1.08, opacity: 0.5, ease: "none" }, 0);
+      // Layer 3 — Background (slowest drift)
+      tl.to(bgRef.current,    { scale: 1.07, opacity: 0.45, ease: "none" }, 0);
 
-      // Layer 1 — Foreground text (fast exit)
-      tl.to(labelRef.current,   { y: -55,  opacity: 0, ease: "none" }, 0);
-      tl.to(headRef.current,    { y: -80,  opacity: 0, ease: "none" }, 0.05);
-      tl.to(subRef.current,     { y: -105, opacity: 0, ease: "none" }, 0.1);
-      tl.to(ctaRef.current,     { y: -130, opacity: 0, ease: "none" }, 0.15);
-
-      // Scroll indicator fades immediately
-      tl.to(scrollIndicatorRef.current, { opacity: 0, ease: "none" }, 0);
+      // Layer 1 — Foreground text (fastest exit, staggered Y offsets)
+      tl.to(labelRef.current,    { y: -50,  opacity: 0, ease: "none" }, 0);
+      tl.to(headRef.current,     { y: -75,  opacity: 0, ease: "none" }, 0.05);
+      tl.to(subRef.current,      { y: -100, opacity: 0, ease: "none" }, 0.1);
+      tl.to(ctaRef.current,      { y: -125, opacity: 0, ease: "none" }, 0.15);
+      tl.to(indicatorRef.current, { opacity: 0, ease: "none" }, 0);
     }, sectionRef);
 
     return () => ctx.revert();
@@ -71,20 +70,20 @@ const Hero = () => {
       ref={sectionRef}
       className="relative min-h-screen flex items-center overflow-hidden"
     >
-      {/* ── Background layers ────────────────────────────── */}
+      {/* ── Background ──────────────────────────────────────── */}
       <div ref={bgRef} className="absolute inset-0">
         <AuroraBackground />
-        {/* Dot grid texture */}
+        {/* Dot grid — desktop only (expensive on mobile) */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none hidden sm:block"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Ccircle cx='1' cy='1' r='0.75' fill='%23fff' fill-opacity='0.05'/%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Ccircle cx='1' cy='1' r='0.75' fill='%23fff' fill-opacity='0.045'/%3E%3C/svg%3E")`,
           }}
           aria-hidden="true"
         />
       </div>
 
-      {/* Bottom fade to next section */}
+      {/* Bottom gradient fade */}
       <div
         className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
         style={{
@@ -94,11 +93,10 @@ const Hero = () => {
         aria-hidden="true"
       />
 
-      {/* ── Foreground content ────────────────────────────── */}
+      {/* ── Content ─────────────────────────────────────────── */}
       <motion.div
-        ref={contentRef}
-        className="relative w-full section-padding"
-        style={{ zIndex: 10 }}
+        className="relative w-full z-10"
+        style={{ padding: "6rem 1.25rem 4rem" }}
         variants={container}
         initial="hidden"
         animate="visible"
@@ -106,8 +104,8 @@ const Hero = () => {
         <div className="max-w-6xl mx-auto">
           {/* Label */}
           <motion.div ref={labelRef} variants={item} className="mb-6 sm:mb-8">
-            <span className="inline-flex items-center gap-3 text-[11px] sm:text-xs font-medium tracking-[0.22em] uppercase text-white/40">
-              <span className="w-6 h-px bg-white/20 rounded-full inline-block" />
+            <span className="inline-flex items-center gap-2.5 text-[10px] sm:text-xs font-medium tracking-[0.2em] uppercase text-white/40">
+              <span className="w-5 h-px bg-white/20 rounded-full inline-block" />
               Skill Commerce LLC — Florida, USA
             </span>
           </motion.div>
@@ -116,8 +114,13 @@ const Hero = () => {
           <motion.h1
             ref={headRef}
             variants={item}
-            className="heading-xl text-white text-balance mb-6 sm:mb-8 max-w-4xl"
-            style={{ lineHeight: 1.06 }}
+            className="font-display font-bold text-white text-balance mb-5 sm:mb-7"
+            style={{
+              fontSize: "clamp(2rem, 6vw, 4.5rem)",
+              lineHeight: 1.06,
+              letterSpacing: "-0.02em",
+              maxWidth: "52rem",
+            }}
           >
             Engineering Scalable Digital Commerce Infrastructure
           </motion.h1>
@@ -126,7 +129,8 @@ const Hero = () => {
           <motion.p
             ref={subRef}
             variants={item}
-            className="body-lg text-white/50 max-w-xl mb-10 sm:mb-14 text-balance"
+            className="text-white/50 max-w-lg sm:max-w-xl mb-9 sm:mb-12 text-balance"
+            style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)", lineHeight: 1.65 }}
           >
             Skill Commerce LLC delivers structured, data-driven commerce systems
             for modern online retail operations.
@@ -136,21 +140,20 @@ const Hero = () => {
           <motion.div
             ref={ctaRef}
             variants={item}
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-5"
           >
-            <MagneticButton>
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2.5 bg-white text-zinc-950 px-7 sm:px-8 py-3.5 sm:py-4 rounded-lg font-semibold text-sm sm:text-base group hover:bg-white/90 transition-all duration-200"
-              >
-                Request Consultation
-                <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-              </a>
-            </MagneticButton>
+            {/* Primary CTA — no MagneticButton on mobile (it adds event listeners) */}
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 bg-white text-zinc-950 px-6 sm:px-8 py-3.5 sm:py-4 rounded-lg font-semibold text-sm sm:text-base group hover:bg-white/90 transition-all duration-200 active:scale-[0.98]"
+            >
+              Request Consultation
+              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </a>
 
             <a
               href="#capabilities"
-              className="inline-flex items-center gap-2 text-white/45 hover:text-white/80 text-sm transition-colors duration-200 py-3.5 sm:py-0"
+              className="inline-flex items-center gap-2 text-white/45 hover:text-white/75 text-sm transition-colors duration-200 py-1"
             >
               Explore services
               <span className="w-4 h-px bg-current inline-block" />
@@ -159,11 +162,10 @@ const Hero = () => {
         </div>
       </motion.div>
 
-      {/* ── Scroll indicator ──────────────────────────────── */}
+      {/* ── Scroll indicator ────────────────────────────────── */}
       <motion.div
-        ref={scrollIndicatorRef}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        style={{ zIndex: 10 }}
+        ref={indicatorRef}
+        className="absolute bottom-8 sm:bottom-10 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.8, duration: 0.8 }}

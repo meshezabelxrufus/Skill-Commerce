@@ -41,8 +41,10 @@ const OperationalFramework = () => {
   const stepsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
     const ctx = gsap.context(() => {
-      // Header scrub
+      if (isMobile) return;
+
       gsap.fromTo(
         headerRef.current,
         { opacity: 0, y: 55 },

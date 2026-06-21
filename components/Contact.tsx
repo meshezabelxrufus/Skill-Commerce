@@ -130,7 +130,9 @@ const Contact = () => {
   };
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
     const ctx = gsap.context(() => {
+      if (isMobile) return;
       gsap.fromTo(leftRef.current, { opacity: 0, x: -60 }, {
         opacity: 1, x: 0, ease: "none",
         scrollTrigger: { trigger: sectionRef.current, start: "top 80%", end: "top 38%", scrub: 1.3 },

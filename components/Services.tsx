@@ -59,46 +59,48 @@ const Services = () => {
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+
     const ctx = gsap.context(() => {
-      /* ── Section header — scrub reveal ─────────────────── */
-      gsap.fromTo(
-        headerRef.current,
-        { opacity: 0, y: 60 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: "top 88%",
-            end: "top 48%",
-            scrub: 1.2,
-          },
-        }
-      );
-
-      /* ── Cards — staggered scrub reveals ───────────────── */
-      cardsRef.current.forEach((card, i) => {
-        if (!card) return;
-
-        // Each card enters at scale 0.88 and rises from below
+      if (!isMobile) {
+        /* ── Section header — scrub reveal ─────────────────── */
         gsap.fromTo(
-          card,
-          { opacity: 0, y: 80, scale: 0.88 },
+          headerRef.current,
+          { opacity: 0, y: 60 },
           {
             opacity: 1,
             y: 0,
-            scale: 1,
             ease: "none",
             scrollTrigger: {
-              trigger: card,
-              start: "top 92%",
-              end: "top 55%",
-              scrub: 1 + i * 0.05, // slight stagger in scrub duration
+              trigger: headerRef.current,
+              start: "top 88%",
+              end: "top 48%",
+              scrub: 1.2,
             },
           }
         );
-      });
+
+        /* ── Cards — staggered scrub reveals ───────────────── */
+        cardsRef.current.forEach((card, i) => {
+          if (!card) return;
+          gsap.fromTo(
+            card,
+            { opacity: 0, y: 80, scale: 0.88 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 92%",
+                end: "top 55%",
+                scrub: 1 + i * 0.05,
+              },
+            }
+          );
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
