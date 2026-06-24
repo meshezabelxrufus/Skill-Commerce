@@ -25,28 +25,22 @@ export function LenisProvider({ children }: { children: ReactNode }) {
   const tickRef = useRef<((time: number) => void) | null>(null);
 
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-
     const lenisInstance = new Lenis({
-      // On mobile/touch devices use a faster lerp so it doesn't feel
-      // like it's fighting native momentum scrolling
-      lerp: isMobile ? 0.18 : 0.1,
-      duration: isMobile ? 0.8 : 1.2,
+      lerp: 0.1,
+      duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
-      smoothWheel: !isTouch, // disable smooth wheel on touch — use native
+      smoothWheel: true,
       wheelMultiplier: 1.0,
-      // Lower touch multiplier prevents the "over-scroll lag" on iOS
-      touchMultiplier: isMobile ? 1.0 : 2.0,
+      touchMultiplier: 2.0,
       infinite: false,
     });
 
     setLenis(lenisInstance);
 
-    // Fire ScrollTrigger.update on every Lenis scroll tick
-    lenisInstance.on("scroll", () => ScrollTrigger.update());
+    // Sync Lenis scroll events → ScrollTrigger so pinned sections update correctly
+    lenisInstance.on("scroll", ScrollTrigger.update);
 
     // Drive Lenis via GSAP ticker
     const tick = (time: number) => lenisInstance.raf(time * 1000);
@@ -55,6 +49,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      lenisInstance.off("scroll", ScrollTrigger.update);
       if (tickRef.current) gsap.ticker.remove(tickRef.current);
       lenisInstance.destroy();
     };
